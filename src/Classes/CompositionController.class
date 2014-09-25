@@ -1,0 +1,25 @@
+public class CompositionController {
+    public PageReference ref {get; set;}
+    public PageReference ref1 {get; set;}
+    public boolean toggle { get; set; }
+    
+    public CompositionController() {
+        toggle = true;
+        ref = Page.CompositionDemo;
+        ref1 = Page.CompOsitionDemoAgain;
+    }
+    
+    public PageReference togglePages() {
+        
+        if (toggle) {
+            ref = Page.CompositionDemo;
+            ref1 = Page.CompOsitionDemoAgain;
+            toggle = false;
+        } else {
+            toggle = true;
+            ref = Page.CompOsitionDemoAgain;
+            ref1 = Page.CompositionDemo;
+        }
+        return null;
+    }
+}

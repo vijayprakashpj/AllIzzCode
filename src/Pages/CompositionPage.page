@@ -1,0 +1,18 @@
+<apex:page controller="CompositionController" sidebar="false" showHeader="false">
+  <apex:form>
+  <apex:OutputPanel Id="panel">
+  <apex:composition template="{!ref}">
+      <apex:define name="header">
+          This is header.
+      </apex:define>
+  </apex:composition>
+  <apex:composition template="{!ref1}">
+      <apex:define name="header">
+          This is another header.
+      </apex:define>
+  </apex:Composition>
+  </apex:OutputPanel>
+  
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<apex:CommandButton Id="cmd" action="{!togglePages}" rerender="panel" value="Click Me!"/>
+  </apex:form>
+</apex:page>
