@@ -2,10 +2,10 @@
 * Provides set of utility methods to abort the scheduled jobs, future methods and batch jobs
 */
 public static class DeployUtil {
-	/**
-	* Method to delete all the scheduled jobs
-	* @author Vijay Prakash P J
-	*/
+    /**
+    * Method to delete all the scheduled jobs
+    * @author Vijay Prakash P J
+    */
     public static DeleteAllScheduledJobs() {
         List<CronTrigger> lstDeletedJobs = new List<Id>();
 
@@ -25,10 +25,10 @@ public static class DeployUtil {
     }
 
     /**
-	* Method to delete the specified scheduled job
-	* @author Vijay Prakash P J
-	* @param jobName   Name of the scheduled job.
-	*/
+    * Method to delete the specified scheduled job
+    * @author Vijay Prakash P J
+    * @param jobName   Name of the scheduled job.
+    */
     public static DeleteScheduledJob(String jobName) {
         try {
             CronTrigger jobToDelete = [SELECT Id, CronJobDetail.Name FROM CronTrigger
