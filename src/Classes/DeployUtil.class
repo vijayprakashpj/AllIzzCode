@@ -1,0 +1,72 @@
+/**
+* Provides set of utility methods to abort the scheduled jobs, future methods and batch jobs
+*/
+public static class DeployUtil {
+	/**
+	* Method to delete all the scheduled jobs
+	* @author Vijay Prakash P J
+	*/
+    public static DeleteAllScheduledJobs() {
+        List<CronTrigger> lstDeletedJobs = new List<Id>();
+
+        try {
+            for (CronTrigger job : [SELECT Id, CronJobDetail.Name FROM CronTrigger
+                                       WHERE State <> 'DELETED'
+                                         AND CronJobDetail.JobType in (7)]) {
+                System.abortJob(job.Id);
+                lstDeletedJobs.add(job);
+            }
+        }
+        catch (Exception ex) {
+            System.debug('DeployUtil.DeleteAllScheduledJobs >>> Unable to delete all the scheduled jobs.');
+            System.debug('DeployUtil.DeleteAllScheduledJobs >>> Deleted jobs: ' + lstDeletedJobs);
+            System.debug('DeployUtil.DeleteAllScheduledJobs >>> Exception: ' + ex);
+        }
+    }
+
+    /**
+	* Method to delete the specified scheduled job
+	* @author Vijay Prakash P J
+	* @param jobName   Name of the scheduled job.
+	*/
+    public static DeleteScheduledJob(String jobName) {
+        try {
+            CronTrigger jobToDelete = [SELECT Id, CronJobDetail.Name FROM CronTrigger
+                                        WHERE CronJobDetail.Name = :jobName
+                                          AND State <> 'DELETED'
+                                        LIMIT 1];
+            if (jobToDelete == null) {
+                System.debug('The job ' + jobName + ' is not found or deleted already.');
+            } else {
+                System.abortJob(jobToDelete.Id);
+            }
+        }
+        catch (Exception ex) {
+            System.debug('DeployUtil.DeleteScheduledJob >>> Unable to delete the scheduled job: ' + jobName);
+            System.debug('DeployUtil.DeleteScheduledJob >>> Exception: ' + ex);
+        }
+    }
+
+    /**
+    * Method to delete all the Future and Batchable Apex jobs
+    * @author Vijay Prakash P J
+    */
+    public static DeleteAllFutureAndBatchJobs() {
+        List<AsyncApexJob> lstAbortedAsyncApexJobs = new List<AsyncApexJob>();
+
+        try {
+            for (AsyncApexJob job : [SELECT Id, MethodName, ApexClass.Name FROM AsyncApexJob
+                                      WHERE JobType IN ('Future', 'BatchApex', 'BatchApexWorker', 'ScheduledApex')
+                                        AND Status NOT IN ('Aborted', 'Completed', 'Failed')]) {
+                lstAbortedAsyncApexJobs.add(job);
+
+                System.abortJob(job.Id);
+            }
+        }
+        catch (Exception ex) {
+            System.debug('DeployUtil.DeleteAllFutureAndBatchJobs >>> Unable to delete all the future jobs.');
+            System.debug('DeployUtil.DeleteAllFutureAndBatchJobs >>> Deleted jobs: ' + lstAbortedAsyncApexJobs);
+            System.debug('DeployUtil.DeleteAllFutureAndBatchJobs >>> Exception: ' + ex);
+        }
+    }
+}
